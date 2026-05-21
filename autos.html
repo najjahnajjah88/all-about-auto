@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore and compare every car and brand in the world. Auto Headz provides specifications, luxury hypercars, EV statistics, and side-by-side comparison.">
+    <title>Auto Headz - All About Cars</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Premium Local Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- BACKGROUND VIDEO -->
+    <video autoplay muted loop playsinline id="bgVideo">
+        <source src="Cars video Bg.mp4" type="video/mp4">
+    </video>
+    <div class="bg-overlay"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header>
+        <nav>
+            <div class="logo-container">
+                <div class="logo-icon">AH</div>
+                <div class="logo-text">Auto <span>Headz</span></div>
+            </div>
+
+            <i class="fa fa-bars menu-toggle" id="menuToggle"></i>
+
+            <ul id="navMenu">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#categories-section">Categories</a></li>
+                <li><a href="#cars-grid-section">Explorer</a></li>
+                <li><a href="#brands-section">Brands</a></li>
+                <li><a href="#news-section">News</a></li>
+                <li><a href="#reviews-section">Reviews</a></li>
+                <li><a href="#contact">Contact</a></li>
+                
+                <!-- Color Theme Customizer widget -->
+                <div class="theme-picker">
+                    <span class="theme-dot theme-red active" data-color="red" title="Crimson Red"></span>
+                    <span class="theme-dot theme-blue" data-color="blue" title="Electric Blue"></span>
+                    <span class="theme-dot theme-purple" data-color="purple" title="Cyber Purple"></span>
+                    <span class="theme-dot theme-green" data-color="green" title="Poison Green"></span>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+        <img class="hero-logo-bg" src="Logo.png" alt="Auto Headz Logo Background" onerror="this.style.display='none'">
+        
+        <div class="hero-content">
+            <h1>IT'S ALL ABOUT <span class="accent-text">CARS</span></h1>
+            <h2>Explore Every <span class="accent-text">Car</span> & <span class="accent-text">Brand</span></h2>
+            <p>Your premium automotive dashboard. Discover technical specifications, compare high-performance vehicles side-by-side, and read authentic owner reviews.</p>
+            
+            <div class="search-wrapper">
+                <div class="search-box-container">
+                    <i class="fa fa-search" style="color: var(--accent); margin-right: 15px; font-size: 18px;"></i>
+                    <input type="text" class="search-box" id="heroSearchInput" placeholder="Search Brands, Models, Specs (e.g. Aventador, V12, 1000 HP)...">
+                    <button class="search-btn" id="heroSearchBtn">Explore</button>
+                </div>
+                <div class="search-suggestions" id="searchSuggestions">
+                    <!-- Suggestions rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- Quick Database Stats -->
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <div class="stat-num" id="statTotal">96</div>
+                    <div class="stat-label">Total Vehicles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" id="statElectric">19</div>
+                    <div class="stat-label">Electric Models</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" id="statMaxHP">1914 HP</div>
+                    <div class="stat-label">Peak Performance</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAR CATEGORIES SECTION -->
+    <section id="categories-section" class="categories-section">
+        <div class="section-header">
+            <h2 class="section-title">Car <span>Categories</span></h2>
+            <p class="section-desc">Filter the global database instantly by selecting one of the body styles or power segments below.</p>
+        </div>
+
+        <div class="categories-grid">
+            <div class="category-card" data-category="Sedan">
+                <img src="https://images.unsplash.com/photo-1674719645138-c3fd1aaf8307?q=80&w=1170&auto=format&fit=crop" alt="Sedan Category">
+                <div class="category-overlay">
+                    <h3>Sedans</h3>
+                    <p>Elegant three-box passenger cars</p>
+                </div>
+            </div>
+            <div class="category-card" data-category="SUV">
+                <img src="https://images.unsplash.com/photo-1612563893490-d86ed296e5e6?q=80&w=1169&auto=format&fit=crop" alt="SUV Category">
+                <div class="category-overlay">
+                    <h3>SUVs</h3>
+                    <p>Rugged sport utility vehicles</p>
+                </div>
+            </div>
+            <div class="category-card" data-category="Sports Car">
+                <img src="https://hips.hearstapps.com/hmg-prod/images/vol-27-pcoty-2025-group-1-677dbc61d16c0.jpg?crop=0.962xw:0.719xh;0.0385xw,0.247xh&resize=1200:*" alt="Sports Cars Category">
+                <div class="category-overlay">
+                    <h3>Sports Cars</h3>
+                    <p>Built for track performance and agility</p>
+                </div>
+            </div>
+            <div class="category-card" data-category="Hatchback">
+                <img src="https://images.unsplash.com/photo-1665986808660-5d8c2c9be86b?q=80&w=1170&auto=format&fit=crop" alt="Hatchback Category">
+                <div class="category-overlay">
+                    <h3>Hatchbacks</h3>
+                    <p>Nimble passenger cars with tailgate</p>
+                </div>
+            </div>
+            <div class="category-card" data-category="Electric Cars">
+                <img src="https://images.pexels.com/photos/27243718/pexels-photo-27243718.jpeg" alt="Electric Cars Category">
+                <div class="category-overlay">
+                    <h3>Electric (EVs)</h3>
+                    <p>Zero emission clean energy cruisers</p>
+                </div>
+            </div>
+            <div class="category-card" data-category="Luxury Cars">
+                <img src="https://images.pexels.com/photos/33327689/pexels-photo-33327689.jpeg" alt="Luxury Cars Category">
+                <div class="category-overlay">
+                    <h3>Luxury</h3>
+                    <p>Unmatched comfort and prestige features</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAR EXPLORER SECTION -->
+    <section id="cars-grid-section" class="cars-grid-section" style="position: relative;">
+        <div class="section-header">
+            <h2 class="section-title">Vehicle <span>Explorer</span></h2>
+            <p class="section-desc">Search, sort, filter, and compare detailed engine specs of the world's most desired automotive engineering feats.</p>
+        </div>
+
+        <div class="explorer-container">
+            <!-- Sidebar Filters -->
+            <aside class="filter-sidebar glass-effect">
+                <div class="filter-section">
+                    <h3 class="filter-title">Keyword Search</h3>
+                    <input type="text" id="searchInput" class="filter-control" placeholder="Type car model...">
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Body Style</h3>
+                    <select id="filterCategory" class="filter-control">
+                        <option value="All">All Categories</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Sports Car">Sports Cars</option>
+                        <option value="Hatchback">Hatchbacks</option>
+                        <option value="Electric Cars">Electric Cars</option>
+                        <option value="Luxury Cars">Luxury Cars</option>
+                        <option value="Hypercar">Hypercars</option>
+                        <option value="Muscle Car">Muscle Cars</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Brand</h3>
+                    <select id="filterBrand" class="filter-control">
+                        <option value="All">All Brands</option>
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Transmission</h3>
+                    <select id="filterTransmission" class="filter-control">
+                        <option value="All">All Types</option>
+                        <option value="automatic">Automatic / Dual-Clutch</option>
+                        <option value="manual">Manual</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Fuel Segment</h3>
+                    <select id="filterFuel" class="filter-control">
+                        <option value="All">All Engines</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Pure Electric (EV)</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Budget Ceiling</h3>
+                    <div class="range-slider-container">
+                        <input type="range" id="priceRange" min="1000000" max="250000000" step="500000" value="250000000">
+                        <div class="price-range-labels">
+                            <span>₹10 Lakh</span>
+                            <span id="priceRangeVal" style="color: var(--accent); font-weight: bold;">₹25 Crore</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Sort By</h3>
+                    <select id="sortBy" class="filter-control">
+                        <option value="default">Default Order</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="hp-desc">Performance: Horsepower</option>
+                        <option value="speed-desc">Speed: Top Speed</option>
+                    </select>
+                </div>
+
+                <button class="reset-filters-btn" id="resetFiltersBtn">Reset All Filters</button>
+            </aside>
+
+            <!-- Results View -->
+            <div class="cars-view">
+                <div class="grid-header-bar">
+                    <span id="carsCount">64 Cars Matching</span>
+                    <span>Click eye icon to review details or exchange icon to compare</span>
+                </div>
+                
+                <div class="cars-grid" id="carsGrid">
+                    <!-- Rendered dynamically via app.js -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BRANDS HUB TAGS SECTION -->
+    <section id="brands-section" class="brands-section">
+        <div class="section-header">
+            <h2 class="section-title">Popular <span>Brands</span></h2>
+            <p class="section-desc">Tap a brand name to visit their official website and explore their global line-up.</p>
+        </div>
+
+        <div class="brands-container" id="brandsTags">
+            <!-- Brand Tags rendered dynamically -->
+        </div>
+    </section>
+
+    <!-- AUTOMOTIVE NEWS SECTION -->
+    <section id="news-section" class="news-section">
+        <div class="section-header">
+            <h2 class="section-title">Automotive <span>News</span></h2>
+            <p class="section-desc">Stay tuned to upcoming releases, hybrid powertrain advancements, and industry headlines.</p>
+        </div>
+
+        <div class="news-grid" id="newsGrid">
+            <!-- Dynamic news feeds -->
+        </div>
+    </section>
+
+    <!-- VEHICLE REVIEWS SECTION -->
+    <section id="reviews-section" class="reviews-section">
+        <div class="section-header">
+            <h2 class="section-title">Owner <span>Reviews</span></h2>
+            <p class="section-desc">Read opinions from real supercars and luxury SUV owners, or submit your rating benchmark.</p>
+        </div>
+
+        <div class="reviews-grid">
+            <!-- Leave a review Form -->
+            <div class="review-form-box glass-effect">
+                <h3 class="review-form-title">Write a Review</h3>
+                <form id="reviewForm">
+                    <div class="form-group">
+                        <label for="reviewAuthor">Your Name</label>
+                        <input type="text" id="reviewAuthor" class="filter-control" placeholder="e.g. Mohammed N." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewCarSelect">Select Vehicle</label>
+                        <select id="reviewCarSelect" class="filter-control" required>
+                            <!-- Populated with cars list -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Rating</label>
+                        <div class="star-rating" id="reviewStars" data-value="0">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewComment">Review Description</label>
+                        <textarea id="reviewComment" class="filter-control" rows="4" placeholder="Share your driving feedback, engine response, comfort..." style="resize:none;" required></textarea>
+                    </div>
+                    <button type="submit" class="review-btn">Submit Review</button>
+                </form>
+            </div>
+
+            <!-- List Reviews -->
+            <div class="reviews-list-container" id="reviewsList">
+                <!-- Renders dynamically -->
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- CAR COMPARE DRAWER (SLIDES UP FROM BOTTOM) -->
+    <div class="compare-drawer glass-effect" id="compareDrawer" style="background: rgba(10, 10, 15, 0.95); border: 1px solid var(--border-glass-active);">
+        <div class="compare-drawer-left">
+            <div class="compare-title">Compare Panel</div>
+            <div class="compare-slots" id="compareSlots">
+                <!-- Comparing slots items -->
+            </div>
+        </div>
+        <div class="compare-drawer-right">
+            <button class="compare-start-btn" id="startCompareBtn">Launch Compare</button>
+            <button class="compare-close-btn" id="closeCompareBtn">Clear</button>
+        </div>
+    </div>
+
+    <!-- COMPARISON MATRIX INTERFACE SHEET (FULL MODAL) -->
+    <div class="compare-modal" id="compareModal">
+        <div class="compare-modal-content">
+            <i class="fa fa-times compare-modal-close" id="compareModalClose"></i>
+            <h2 style="font-size: 32px; font-weight: 800; text-align: center; text-transform: uppercase;">
+                Vehicle <span style="color: var(--accent);">Comparison Matrix</span>
+            </h2>
+            <p style="color: var(--text-muted); text-align: center; margin-bottom: 30px;">
+                Winner specifications are highlighted in glowing highlights.
+            </p>
+            <div id="compareTableBody" class="compare-grid">
+                <!-- Populated via compare engine -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SPECS DETAIL MODAL (FADES IN) -->
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="detail-modal">
+            <i class="fa fa-times modal-close-btn" id="modalCloseBtn"></i>
+            
+            <div class="detail-modal-media">
+                <img id="modalImg" src="camry.jpg" alt="Active Car">
+                <div class="detail-modal-media-overlay"></div>
+            </div>
+
+            <div class="detail-modal-body">
+                <div class="detail-modal-header">
+                    <span id="modalBrand" class="detail-modal-brand">Bugatti</span>
+                    <h2 id="modalTitle" class="detail-modal-title">Chiron</h2>
+                </div>
+
+                <!-- Tabs -->
+                <div class="modal-tabs">
+                    <button class="modal-tab-btn active" data-tab="overview">Overview</button>
+                    <button class="modal-tab-btn" data-tab="specs">Full Specs</button>
+                </div>
+
+                <!-- Tab 1: Overview -->
+                <div class="modal-tab-content active" id="tab-overview">
+                    <div class="spec-list-detailed" style="margin-bottom: 25px;">
+                        <div class="spec-detail-row">
+                            <strong>Segment Style</strong>
+                            <span id="gaugeType">Hypercar</span>
+                        </div>
+                        <div class="spec-detail-row">
+                            <strong>Launch Budget</strong>
+                            <span id="gaugePrice">$3 Million</span>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 16px; margin-bottom: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px;">
+                        Quick Diagnostics
+                    </h3>
+                    <div class="dashboard-specs" style="margin-top: 0;">
+                        <div class="dashboard-stat-box">
+                            <span style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">Max Power output</span>
+                            <div class="dashboard-stat-val" id="gaugeHP">1500 HP</div>
+                        </div>
+                        <div class="dashboard-stat-box">
+                            <span style="font-size: 11px; text-transform: uppercase; color: var(--text-muted);">Top speed threshold</span>
+                            <div class="dashboard-stat-val" id="gaugeSpeed">490 km/h</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Full Specs -->
+                <div class="modal-tab-content" id="tab-specs">
+                    <div class="spec-list-detailed" id="detailedSpecsList">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER SECTION -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Auto <span>Headz</span></h2>
+                <p>All Automotive flagships, supercars, luxury SUVs, and battery electric vehicles in one interactive ecosystem.</p>
+                <p>Designed and built for automotive headz around the world.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Quick Segments</h3>
+                <ul>
+                    <li><a href="#" onclick="event.preventDefault(); setFilterCategory('Sports Car'); scrollToSection('cars-grid-section');">Supercars</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); setFilterCategory('Electric Cars'); scrollToSection('cars-grid-section');">Electric Vehicles</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); setFilterCategory('Luxury Cars'); scrollToSection('cars-grid-section');">Luxury Sedans</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); setFilterCategory('SUV'); scrollToSection('cars-grid-section');">All SUVs</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); setFilterCategory('Hypercar'); scrollToSection('cars-grid-section');">Hypercars</a></li>
+                    <li><a href="#" onclick="event.preventDefault(); setFilterCategory('Muscle Car'); scrollToSection('cars-grid-section');">Muscle Cars</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h3>Contact & Credits</h3>
+                <p><strong>Owner:</strong> Mohammed Najjah</p>
+                <p><strong>Email:</strong> automotiheadz@gmail.com</p>
+                <p><strong>Phone:</strong> +91 7510694878</p>
+                <p><strong>Instagram:</strong> @AutoHead.z</p>
+                <p><strong>Location:</strong> Kerala, India</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Auto Headz. All rights reserved. Made for pairing with the community.</p>
+        </div>
+    </footer>
+
+    <!-- JS Core scripts references -->
+    <script src="cars-data.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
