@@ -1302,7 +1302,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Glanza",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://cdni.autocarindia.com/ExtraImages/20241021111328_Glanza%20Web.jpg",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "Hatchback",
@@ -1318,7 +1318,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Urban Cruiser Hyryder",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1612563893490-d86ed296e5e6?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://www.team-bhp.com/carpics/2022-toyota-urban-cruiser-hyryder/l/exterior/2022-toyota-urban-cruiser-hyryder-01.jpg",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "Hybrid SUV",
@@ -1334,7 +1334,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Rumion",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1605559424843-9f5e27f9e2d0?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://media.cdntoyota.co.za/toyotacms23/attachments/cli2xpai56x6y2nw10nydz2w9-ext-1.desktop.jpg",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "MPV",
@@ -1350,7 +1350,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Urban Cruiser Taisor",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://www.nurcmedianext.com/vehicleImages/vehicle-image-Urban%20Cruiser%20Taisor-urban-cruiser-taisor.jpg",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "SUV",
@@ -1366,7 +1366,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Vellfire",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://i.pinimg.com/originals/44/e4/3f/44e43f9fc9ce39222ba9eb5e2d259b2a.jpg",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "Luxury MPV",
@@ -1377,6 +1377,22 @@ const CARS_DATA = [
             "Mileage": "16 km/l",
             "Transmission": "e-CVT",
             "Fuel": "Hybrid"
+        }
+    },
+    {
+        "name": "Toyota Yaris",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyota.com",
+        "specs": {
+            "Type": "Sedan",
+            "Price": "₹12 Lakh",
+            "Engine": "1.5L Petrol",
+            "Horsepower": "107 HP",
+            "Top Speed": "175 km/h",
+            "Mileage": "17 km/l",
+            "Transmission": "CVT",
+            "Fuel": "Petrol"
         }
     },
     {
