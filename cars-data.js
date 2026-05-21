@@ -1157,7 +1157,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Camry Hybrid",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://images.hgmsites.net/hug/2025-toyota-camry_100926322_h.jpg",
         "link": "https://www.toyota.com/camry/",
         "specs": {
             "Type": "Hybrid Sedan",
@@ -1173,7 +1173,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Corolla Altis",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://d1hv7ee95zft1i.cloudfront.net/custom/car-model-photo/original/toyota-corolla-altis-hybrid-review-road-test-front-quarter-exterior-philippines-5de4a59f318b3.jpg",
         "link": "https://www.toyota.com",
         "specs": {
             "Type": "Sedan",
@@ -1189,7 +1189,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Innova Crysta",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1611566026373-c6c7f4b9e2e4?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://www.autoworldjournal.com/wp-content/uploads/2023/08/Toyota-Innova-Crysta_Exterior.jpg",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "MPV",
@@ -1205,7 +1205,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Innova Hycross",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1605559424843-9f5e27f9e2d0?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://www.financialexpress.com/wp-content/uploads/2022/11/Toyota-Innova-HyCross-1.jpg?w=1024",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "Hybrid MPV",
@@ -1221,7 +1221,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Hilux",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1626078299845-4a9a0b2a0b80?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://www.topgear.com/sites/default/files/2025/03/1-Toyota-Hilux-review-2025.jpg",
         "link": "https://www.toyotabharat.com/",
         "specs": {
             "Type": "Pickup Truck",
@@ -1237,7 +1237,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Land Cruiser Prado",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1619767887756-9f550f5a2c63?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://img.autotrader.co.za/32068572",
         "link": "https://www.toyota.com",
         "specs": {
             "Type": "SUV",
@@ -1253,7 +1253,7 @@ const CARS_DATA = [
     {
         "name": "Toyota Prius",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1609520505218-7428e87e1a1c?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://images.ctfassets.net/c9t6u0qhbv9e/7r3WcSQgbfpQpOmR3ZG9ji/77a39f05c3f8329d9960086778768bd0/CG_2024_Toyota_Prius_XLE_Red_Front_Quarter_View.jpg",
         "link": "https://www.toyota.com/prius/",
         "specs": {
             "Type": "Hybrid Hatchback",
@@ -1269,7 +1269,7 @@ const CARS_DATA = [
     {
         "name": "Toyota bZ4X",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1612563893490-d86ed296e5e6?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://www.digitaltrends.com/uploads/2023/02/2023-Toyota-bZ4X-front-three-quarter.jpeg?p=1",
         "link": "https://www.toyota.com/bz4x/",
         "specs": {
             "Type": "Electric SUV",
@@ -1286,7 +1286,7 @@ const CARS_DATA = [
     {
         "name": "Toyota GR86",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1619767887754-15c5d0f8e72b?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://www.edmunds.com/assets/m/cs/blt8d571d073b0997ef/674f4d994b282e636581059c/2024-toyota-gr86-f34.jpg",
         "link": "https://www.toyota.com/gr86/",
         "specs": {
             "Type": "Sports Coupe",
