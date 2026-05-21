@@ -1364,6 +1364,22 @@ const CARS_DATA = [
         }
     },
     {
+        "name": "Toyota Vellfire",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "Luxury MPV",
+            "Price": "₹1.30 Crore",
+            "Engine": "2.5L Hybrid (Petrol + Electric)",
+            "Horsepower": "246 HP",
+            "Top Speed": "170 km/h",
+            "Mileage": "16 km/l",
+            "Transmission": "e-CVT",
+            "Fuel": "Hybrid"
+        }
+    },
+    {
         "name": "Mercedes G-Class G 63 AMG",
         "brand": "Mercedes",
         "image": "https://www.motorcarsofjackson.com/imagetag/335/82/l/Used-2020-Mercedes-Benz-G-Class-AMG-G-63-for-sale-Jackson-MS.jpg",
