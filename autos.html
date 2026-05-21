@@ -206,10 +206,10 @@
                 <div class="filter-section">
                     <h3 class="filter-title">Budget Ceiling</h3>
                     <div class="range-slider-container">
-                        <input type="range" id="priceRange" min="1000000" max="250000000" step="500000" value="250000000">
+                        <input type="range" id="priceRange" min="1000000" max="600000000" step="500000" value="600000000">
                         <div class="price-range-labels">
                             <span>₹10 Lakh</span>
-                            <span id="priceRangeVal" style="color: var(--accent); font-weight: bold;">₹25 Crore</span>
+                            <span id="priceRangeVal" style="color: var(--accent); font-weight: bold;">₹60 Crore</span>
                         </div>
                     </div>
                 </div>
@@ -259,6 +259,13 @@
         <div class="section-header">
             <h2 class="section-title">Automotive <span>News</span></h2>
             <p class="section-desc">Stay tuned to upcoming releases, hybrid powertrain advancements, and industry headlines.</p>
+
+            <div class="news-toolbar">
+                <button class="news-refresh-btn" id="newsRefreshBtn" type="button">
+                    Refresh Live News
+                </button>
+                <span class="news-updated" id="newsUpdatedAt" aria-live="polite"></span>
+            </div>
         </div>
 
         <div class="news-grid" id="newsGrid">

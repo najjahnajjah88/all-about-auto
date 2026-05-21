@@ -1499,6 +1499,41 @@ input[type=range]::-webkit-slider-thumb:hover {
     margin: 80px auto 0;
 }
 
+.news-toolbar {
+    margin-top: 18px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.news-refresh-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--text-white);
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.news-refresh-btn:hover {
+    border-color: var(--border-glass-active);
+    box-shadow: var(--shadow-glow);
+}
+
+.news-refresh-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.news-updated {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
 .news-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));

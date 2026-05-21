@@ -1155,6 +1155,151 @@ const CARS_DATA = [
         }
     },
     {
+        "name": "Toyota Camry Hybrid",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyota.com/camry/",
+        "specs": {
+            "Type": "Hybrid Sedan",
+            "Price": "₹48 Lakh",
+            "Engine": "2.5L Hybrid (Petrol + Electric)",
+            "Horsepower": "227 HP",
+            "Top Speed": "180 km/h",
+            "Mileage": "25 km/l",
+            "Transmission": "e-CVT",
+            "Fuel": "Hybrid"
+        }
+    },
+    {
+        "name": "Toyota Corolla Altis",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyota.com",
+        "specs": {
+            "Type": "Sedan",
+            "Price": "₹20 Lakh",
+            "Engine": "1.8L Petrol",
+            "Horsepower": "140 HP",
+            "Top Speed": "190 km/h",
+            "Mileage": "15 km/l",
+            "Transmission": "CVT",
+            "Fuel": "Petrol"
+        }
+    },
+    {
+        "name": "Toyota Innova Crysta",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1611566026373-c6c7f4b9e2e4?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "MPV",
+            "Price": "₹26 Lakh",
+            "Engine": "2.4L Diesel",
+            "Horsepower": "150 HP",
+            "Top Speed": "175 km/h",
+            "Mileage": "13 km/l",
+            "Transmission": "6-Speed Manual",
+            "Fuel": "Diesel"
+        }
+    },
+    {
+        "name": "Toyota Innova Hycross",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1605559424843-9f5e27f9e2d0?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "Hybrid MPV",
+            "Price": "₹30 Lakh",
+            "Engine": "2.0L Hybrid (Petrol + Electric)",
+            "Horsepower": "186 HP",
+            "Top Speed": "170 km/h",
+            "Mileage": "21 km/l",
+            "Transmission": "e-CVT",
+            "Fuel": "Hybrid"
+        }
+    },
+    {
+        "name": "Toyota Hilux",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1626078299845-4a9a0b2a0b80?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "Pickup Truck",
+            "Price": "₹40 Lakh",
+            "Engine": "2.8L Turbo Diesel",
+            "Horsepower": "201 HP",
+            "Top Speed": "175 km/h",
+            "Mileage": "12 km/l",
+            "Transmission": "6-Speed Automatic",
+            "Fuel": "Diesel"
+        }
+    },
+    {
+        "name": "Toyota Land Cruiser Prado",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1619767887756-9f550f5a2c63?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyota.com",
+        "specs": {
+            "Type": "SUV",
+            "Price": "₹1.20 Crore",
+            "Engine": "2.8L Turbo Diesel",
+            "Horsepower": "201 HP",
+            "Top Speed": "175 km/h",
+            "Mileage": "11 km/l",
+            "Transmission": "8-Speed Automatic",
+            "Fuel": "Diesel"
+        }
+    },
+    {
+        "name": "Toyota Prius",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1609520505218-7428e87e1a1c?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyota.com/prius/",
+        "specs": {
+            "Type": "Hybrid Hatchback",
+            "Price": "₹35 Lakh",
+            "Engine": "2.0L Hybrid (Petrol + Electric)",
+            "Horsepower": "194 HP",
+            "Top Speed": "180 km/h",
+            "Mileage": "24 km/l",
+            "Transmission": "e-CVT",
+            "Fuel": "Hybrid"
+        }
+    },
+    {
+        "name": "Toyota bZ4X",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1612563893490-d86ed296e5e6?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyota.com/bz4x/",
+        "specs": {
+            "Type": "Electric SUV",
+            "Price": "₹55 Lakh",
+            "Battery": "71.4 kWh",
+            "Range": "500 km",
+            "Horsepower": "214 HP",
+            "Top Speed": "160 km/h",
+            "Charging": "Fast Charging",
+            "Transmission": "Single-Speed Automatic",
+            "Fuel": "Electric"
+        }
+    },
+    {
+        "name": "Toyota GR86",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1619767887754-15c5d0f8e72b?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyota.com/gr86/",
+        "specs": {
+            "Type": "Sports Coupe",
+            "Price": "₹35 Lakh",
+            "Engine": "2.4L Naturally Aspirated Flat-4",
+            "Horsepower": "228 HP",
+            "Top Speed": "226 km/h",
+            "Mileage": "12 km/l",
+            "Transmission": "6-Speed Manual",
+            "Fuel": "Petrol"
+        }
+    },
+    {
         "name": "Mercedes G-Class G 63 AMG",
         "brand": "Mercedes",
         "image": "https://www.motorcarsofjackson.com/imagetag/335/82/l/Used-2020-Mercedes-Benz-G-Class-AMG-G-63-for-sale-Jackson-MS.jpg",

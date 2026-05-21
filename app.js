@@ -10,7 +10,7 @@ const STATE = {
         transmission: 'All',
         fuel: 'All',
         minPrice: 0,
-        maxPrice: 250000000, // 25 Crore (expressed in INR)
+        maxPrice: 600000000, // 60 Crore (expressed in INR)
         sortBy: 'default' // default, price-asc, price-desc, hp-desc, speed-desc
     },
     compareList: [], // holds up to 3 car objects
@@ -129,8 +129,22 @@ document.addEventListener('DOMContentLoaded', () => {
     renderBrands();
     renderCarsGrid();
     renderNews();
+    initLiveNews();
     updateQuickStats();
 });
+
+// Live news updates (periodic refresh + manual refresh)
+function initLiveNews() {
+    const refreshBtn = document.getElementById('newsRefreshBtn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => renderNews({ reason: 'manual' }));
+    }
+
+    // Refresh every 5 minutes.
+    window.setInterval(() => {
+        renderNews({ reason: 'interval', silentLoading: true });
+    }, 5 * 60 * 1000);
+}
 
 // Nav menu handlers & smooth scrolling active states
 function initNavigation() {
@@ -426,7 +440,7 @@ function initFilters() {
                 transmission: 'All',
                 fuel: 'All',
                 minPrice: 0,
-                maxPrice: 250000000,
+                maxPrice: 600000000,
                 sortBy: 'default'
             };
             
@@ -437,8 +451,8 @@ function initFilters() {
             if (filterTransmissionSelect) filterTransmissionSelect.value = 'All';
             if (filterFuelSelect) filterFuelSelect.value = 'All';
             if (priceSlider) {
-                priceSlider.value = 250000000;
-                document.getElementById('priceRangeVal').innerText = '₹25 Crore';
+                priceSlider.value = 600000000;
+                document.getElementById('priceRangeVal').innerText = '₹60 Crore';
             }
             if (sortSelect) sortSelect.value = 'default';
 
@@ -1156,16 +1170,28 @@ function renderReviewsList() {
 // ----------------------------------------------------
 // NEWS ARTICLES GENERATOR (LIVE REDDIT FEED WITH CURATED FALLBACK)
 // ----------------------------------------------------
-async function renderNews() {
+let NEWS_FETCH_INFLIGHT = null;
+
+async function renderNews(opts = {}) {
     const newsGrid = document.getElementById('newsGrid');
     if (!newsGrid) return;
 
-    newsGrid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-muted);">
-            <i class="fa fa-spinner fa-spin" style="font-size: 24px; color: var(--accent); margin-bottom: 10px;"></i>
-            <p>Syncing live feeds with Reddit /r/cars...</p>
-        </div>
-    `;
+    const updatedEl = document.getElementById('newsUpdatedAt');
+    const refreshBtn = document.getElementById('newsRefreshBtn');
+
+    // Prevent overlapping refreshes.
+    if (NEWS_FETCH_INFLIGHT) return;
+    NEWS_FETCH_INFLIGHT = true;
+    if (refreshBtn) refreshBtn.disabled = true;
+
+    if (!opts.silentLoading) {
+        newsGrid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-muted);">
+                <i class="fa fa-spinner fa-spin" style="font-size: 24px; color: var(--accent); margin-bottom: 10px;"></i>
+                <p>Syncing live feeds...</p>
+            </div>
+        `;
+    }
 
     // High quality backup car photos for feeds
     const fallbackPhotos = [
@@ -1178,7 +1204,9 @@ async function renderNews() {
     ];
 
     try {
-        const res = await fetch('https://www.reddit.com/r/cars/new.json?limit=6');
+        const res = await fetch('https://www.reddit.com/r/cars/new.json?limit=8&raw_json=1', {
+            cache: 'no-store'
+        });
         if (!res.ok) throw new Error("Reddit feed unreachable");
 
         const json = await res.json();
@@ -1227,8 +1255,68 @@ async function renderNews() {
             newsGrid.appendChild(card);
         });
 
+        // Cache last good response for offline/failover.
+        try {
+            localStorage.setItem('autoheadz-live-news-cache', JSON.stringify({
+                at: Date.now(),
+                posts: posts.map(p => p.data).slice(0, 8)
+            }));
+        } catch (_) {}
+
+        if (updatedEl) {
+            updatedEl.textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+        }
+
     } catch (e) {
         console.warn("Falling back to static news content: ", e);
+
+        // Try cached live posts first.
+        let cached = null;
+        try {
+            cached = JSON.parse(localStorage.getItem('autoheadz-live-news-cache') || 'null');
+        } catch (_) {}
+
+        if (cached && Array.isArray(cached.posts) && cached.posts.length) {
+            newsGrid.innerHTML = '';
+            cached.posts.slice(0, 8).forEach((item, index) => {
+                const title = item.title;
+                const date = new Date(item.created_utc * 1000).toLocaleDateString();
+                const source = `Cached Reddit r/cars • u/${item.author}`;
+
+                let summary = item.selftext ? item.selftext.trim() : "";
+                if (summary.length > 140) summary = summary.substring(0, 137) + "...";
+                if (!summary) summary = "Latest community posts and discussions.";
+
+                let image = fallbackPhotos[index % fallbackPhotos.length];
+                if (item.thumbnail && item.thumbnail.startsWith('http')) image = item.thumbnail;
+                const permalink = `https://www.reddit.com${item.permalink}`;
+
+                const card = document.createElement('article');
+                card.className = 'news-card glass-effect';
+                card.innerHTML = `
+                    <div class="news-img">
+                        <img src="${image}" alt="${title}" onerror="this.src='${fallbackPhotos[index % fallbackPhotos.length]}'">
+                    </div>
+                    <div class="news-content">
+                        <span class="news-meta">${source} • ${date}</span>
+                        <h3 class="news-title" style="font-size: 16px; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; height: 44px;">${title}</h3>
+                        <p class="news-summary" style="font-size: 13px; line-height: 1.4; height: 60px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">${summary}</p>
+                        <a href="${permalink}" target="_blank" class="news-link" style="margin-top: auto;">
+                            View Community Discussion <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                `;
+                newsGrid.appendChild(card);
+            });
+
+            if (updatedEl) {
+                updatedEl.textContent = `Updated: ${new Date(cached.at).toLocaleTimeString()} (cached)`;
+            }
+
+            NEWS_FETCH_INFLIGHT = null;
+            if (refreshBtn) refreshBtn.disabled = false;
+            return;
+        }
         
         // Show static backup feeds
         newsGrid.innerHTML = '';
@@ -1250,5 +1338,12 @@ async function renderNews() {
             `;
             newsGrid.appendChild(card);
         });
+
+        if (updatedEl) {
+            updatedEl.textContent = 'Updated: unavailable (offline fallback)';
+        }
     }
+
+    NEWS_FETCH_INFLIGHT = null;
+    if (refreshBtn) refreshBtn.disabled = false;
 }
