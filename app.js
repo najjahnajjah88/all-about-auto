@@ -171,6 +171,18 @@ function initNavigation() {
                     e.preventDefault();
                     setFilterCategory('Electric Cars');
                     scrollToSection('cars-grid-section');
+                } else if (href === '#compare') {
+                    e.preventDefault();
+                    // Compare lives inside the Explorer section.
+                    scrollToSection('cars-grid-section');
+                    if (STATE.compareList.length >= 2) {
+                        openCompareModal();
+                    } else if (STATE.compareList.length === 1) {
+                        updateCompareDrawer();
+                        alert('Add 1 more car to launch compare.');
+                    } else {
+                        alert('Select 2 cars using the compare button on any vehicle card.');
+                    }
                 } else {
                     // Regular section scrolling
                     e.preventDefault();
@@ -661,7 +673,7 @@ function renderCarsGrid() {
                 <span class="car-badge">${car.specs.Type.split(' ')[0]}</span>
                 <div class="car-card-actions">
                     <button class="action-circle-btn compare-btn ${isAddedToCompare ? 'compare-added' : ''}" title="Compare vehicle" data-name="${car.name}">
-                        <i class="fa ${isAddedToCompare ? 'fa-check' : 'fa-exchange-alt'}"></i>
+                        <i class="fa ${isAddedToCompare ? 'fa-check' : 'fa-right-left'}"></i>
                     </button>
                     <button class="action-circle-btn quickview-btn" title="View specs detailed" data-name="${car.name}">
                         <i class="fa fa-eye"></i>
@@ -770,8 +782,8 @@ function toggleCompare(car) {
         STATE.compareList.splice(index, 1);
     } else {
         // Add
-        if (STATE.compareList.length >= 3) {
-            alert("You can compare up to 3 cars at once!");
+        if (STATE.compareList.length >= 2) {
+            alert("You can compare up to 2 cars at once!");
             return;
         }
         STATE.compareList.push(car);
@@ -809,8 +821,8 @@ function updateCompareDrawer() {
         slotContainer.appendChild(slot);
     });
 
-    // Show empty slots if less than 3
-    for (let i = STATE.compareList.length; i < 3; i++) {
+    // Show empty slots if less than 2
+    for (let i = STATE.compareList.length; i < 2; i++) {
         const emptySlot = document.createElement('div');
         emptySlot.className = 'compare-slot';
         emptySlot.style.opacity = '0.5';

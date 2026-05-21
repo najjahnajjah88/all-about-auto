@@ -549,6 +549,18 @@ nav ul li a:hover, nav ul li a.active {
     top: 100px;
     padding: 25px;
     z-index: 90;
+    /* Keep filters usable while the grid scrolls */
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+}
+
+.filter-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.filter-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
 }
 
 .filter-section {
@@ -1649,6 +1661,8 @@ footer {
         position: relative;
         top: 0;
         margin-bottom: 30px;
+        max-height: none;
+        overflow-y: visible;
     }
     
     .footer-content {
@@ -1764,5 +1778,11 @@ footer {
     .compare-drawer-right {
         width: 100%;
         justify-content: center;
+    }
+
+    /* Touch devices: no hover, keep action buttons visible */
+    .car-card-actions {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
