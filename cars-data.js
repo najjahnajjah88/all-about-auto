@@ -1300,6 +1300,70 @@ const CARS_DATA = [
         }
     },
     {
+        "name": "Toyota Glanza",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "Hatchback",
+            "Price": "₹10 Lakh",
+            "Engine": "1.2L Petrol",
+            "Horsepower": "89 HP",
+            "Top Speed": "170 km/h",
+            "Mileage": "22 km/l",
+            "Transmission": "AMT",
+            "Fuel": "Petrol"
+        }
+    },
+    {
+        "name": "Toyota Urban Cruiser Hyryder",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1612563893490-d86ed296e5e6?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "Hybrid SUV",
+            "Price": "₹18 Lakh",
+            "Engine": "1.5L Petrol Hybrid",
+            "Horsepower": "115 HP",
+            "Top Speed": "170 km/h",
+            "Mileage": "27 km/l",
+            "Transmission": "e-CVT",
+            "Fuel": "Hybrid"
+        }
+    },
+    {
+        "name": "Toyota Rumion",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1605559424843-9f5e27f9e2d0?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "MPV",
+            "Price": "₹12 Lakh",
+            "Engine": "1.5L Petrol",
+            "Horsepower": "103 HP",
+            "Top Speed": "170 km/h",
+            "Mileage": "20 km/l",
+            "Transmission": "6-Speed Automatic",
+            "Fuel": "Petrol"
+        }
+    },
+    {
+        "name": "Toyota Urban Cruiser Taisor",
+        "brand": "Toyota",
+        "image": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1200&auto=format&fit=crop",
+        "link": "https://www.toyotabharat.com/",
+        "specs": {
+            "Type": "SUV",
+            "Price": "₹13 Lakh",
+            "Engine": "1.0L Turbo Petrol",
+            "Horsepower": "100 HP",
+            "Top Speed": "180 km/h",
+            "Mileage": "20 km/l",
+            "Transmission": "6-Speed Automatic",
+            "Fuel": "Petrol"
+        }
+    },
+    {
         "name": "Mercedes G-Class G 63 AMG",
         "brand": "Mercedes",
         "image": "https://www.motorcarsofjackson.com/imagetag/335/82/l/Used-2020-Mercedes-Benz-G-Class-AMG-G-63-for-sale-Jackson-MS.jpg",
