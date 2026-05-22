@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Premium Local Stylesheet -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Prevent /favicon.ico 404 noise -->
+    <link rel="icon" href="Logo.png">
 </head>
 
 <body>
@@ -34,14 +37,15 @@
             <i class="fa fa-bars menu-toggle" id="menuToggle"></i>
 
              <ul id="navMenu">
-                 <li><a href="#home" class="active">Home</a></li>
-                 <li><a href="#categories-section">Categories</a></li>
-                 <li><a href="#cars-grid-section">Explorer</a></li>
-                 <li><a href="#compare" id="navCompareLink">Compare</a></li>
-                 <li><a href="#brands-section">Brands</a></li>
-                 <li><a href="#news-section">News</a></li>
-                 <li><a href="#reviews-section">Reviews</a></li>
-                 <li><a href="#contact">Contact</a></li>
+                  <li><a href="#home" class="active">Home</a></li>
+                  <li><a href="#categories-section">Categories</a></li>
+                  <li><a href="#cars-grid-section">Explorer</a></li>
+                  <li><a href="#compare" id="navCompareLink">Compare</a></li>
+                  <li><a href="#brands-section">Brands</a></li>
+                  <li><a href="#news-section">News</a></li>
+                  <li><a href="#reviews-section">Reviews</a></li>
+                  <li><a href="#" id="navAccountLink">Account</a></li>
+                  <li><a href="#contact">Contact</a></li>
                 
                 <!-- Color Theme Customizer widget -->
                 <div class="theme-picker">
@@ -450,8 +454,104 @@
     </footer>
 
     <!-- JS Core scripts references -->
-    <script src="cars-data.js"></script>
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
+
+    <!-- AUTH MODAL (Login/Register) -->
+    <div class="modal-backdrop" id="authBackdrop" style="display:none;">
+        <div class="detail-modal" style="max-width: 520px;">
+            <i class="fa fa-times modal-close-btn" id="authCloseBtn"></i>
+            <div class="detail-modal-body" style="padding: 22px 22px 18px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap: 12px; margin-bottom: 14px;">
+                    <h2 style="margin:0; font-size: 20px;">Account</h2>
+                    <div id="authStatus" style="font-size: 12px; color: var(--text-muted);"></div>
+                </div>
+
+                <div class="modal-tabs" style="margin-bottom: 14px;">
+                    <button class="modal-tab-btn active" id="authTabLogin" type="button">Login</button>
+                    <button class="modal-tab-btn" id="authTabRegister" type="button">Register</button>
+                </div>
+
+                <div id="authPaneLogin">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" class="filter-control" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" class="filter-control" placeholder="Password" autocomplete="current-password">
+                    </div>
+                    <button type="button" class="review-btn" id="loginBtn" style="width:100%;">Login</button>
+                </div>
+
+                <div id="authPaneRegister" style="display:none;">
+                    <div class="form-group">
+                        <label for="regName">Name</label>
+                        <input type="text" id="regName" class="filter-control" placeholder="Your name" autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" class="filter-control" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" class="filter-control" placeholder="Min 8 characters" autocomplete="new-password">
+                    </div>
+                    <button type="button" class="review-btn" id="registerBtn" style="width:100%;">Create Account</button>
+                </div>
+
+                <div id="authError" style="display:none; margin-top: 12px; color: #ff6b6b; font-size: 13px;"></div>
+
+                <div style="margin-top: 14px; display:flex; gap: 10px; justify-content:flex-end;">
+                    <button type="button" class="news-refresh-btn" id="logoutBtn" style="display:none;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL (hidden unless admin) -->
+    <section id="admin-section" class="reviews-section" style="display:none;">
+        <div class="section-header">
+            <h2 class="section-title">Admin <span>Panel</span></h2>
+            <p class="section-desc">Manage the cars database (admin only).</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-form-box glass-effect">
+                <h3 class="review-form-title">Add New Car</h3>
+                <form id="adminCarForm">
+                    <div class="form-group">
+                        <label for="adminCarName">Car Name</label>
+                        <input type="text" id="adminCarName" class="filter-control" placeholder="e.g. Porsche 911" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminCarBrand">Brand</label>
+                        <input type="text" id="adminCarBrand" class="filter-control" placeholder="e.g. Porsche" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminCarImage">Image URL</label>
+                        <input type="text" id="adminCarImage" class="filter-control" placeholder="https://..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminCarLink">Brand Link (optional)</label>
+                        <input type="text" id="adminCarLink" class="filter-control" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="adminCarSpecs">Specs JSON</label>
+                        <textarea id="adminCarSpecs" class="filter-control" rows="6" placeholder='{"Type":"Sports Car","Price":"₹1 Crore"}' style="resize:none;" required></textarea>
+                    </div>
+                    <button type="submit" class="review-btn" style="width:100%;">Add Car</button>
+                    <div id="adminCarMsg" style="margin-top: 12px; font-size: 13px; color: var(--text-muted);"></div>
+                </form>
+            </div>
+
+            <div class="reviews-list-container glass-effect" style="padding: 18px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap: 10px; margin-bottom: 10px;">
+                    <h3 style="margin:0; font-size: 16px;">Quick Actions</h3>
+                    <button type="button" class="news-refresh-btn" id="openAuthBtn">Account</button>
+                </div>
+                <p style="margin:0; color: var(--text-muted); font-size: 13px;">Use the form to add cars. Edit/delete can be added later if needed.</p>
+            </div>
+        </div>
+    </section>
 </body>
 
 </html>

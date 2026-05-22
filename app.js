@@ -15,8 +15,13 @@ const STATE = {
     },
     compareList: [], // holds up to 3 car objects
     themeColor: localStorage.getItem('autoheadz-theme') || 'red',
-    activeModalCar: null
+    activeModalCar: null,
+    user: null,
+    token: localStorage.getItem('autoheadz-token') || null
 };
+
+// Cars data now comes from the Flask API.
+let CARS_DATA = [];
 
 // Map color codes to theme picker
 const THEME_MAP = {
@@ -51,28 +56,65 @@ const NEWS_DATA = [
     }
 ];
 
-// Normalize car brand names (fix "Range" -> "Land Rover")
-CARS_DATA.forEach(car => {
-    if (car.brand === "Range" || car.name.toLowerCase().startsWith("range rover")) {
-        car.brand = "Land Rover";
+function normalizeCarsData() {
+    // Normalize car brand names (fix "Range" -> "Land Rover")
+    CARS_DATA.forEach(car => {
+        if (car.brand === "Range" || car.name.toLowerCase().startsWith("range rover")) {
+            car.brand = "Land Rover";
+        }
+        // Set a clean numeric price for sorting/filtering
+        car.numericPrice = parsePriceToINR(car.specs.Price);
+
+        // Set a clean numeric horsepower
+        if (car.specs.Horsepower) {
+            car.numericHP = parseInt(car.specs.Horsepower) || 0;
+        } else {
+            car.numericHP = 0;
+        }
+
+        // Set a clean numeric top speed
+        if (car.specs["Top Speed"]) {
+            car.numericSpeed = parseInt(car.specs["Top Speed"]) || 0;
+        } else {
+            car.numericSpeed = 0;
+        }
+    });
+}
+
+async function apiFetch(path, opts = {}) {
+    const headers = new Headers(opts.headers || {});
+    headers.set('Accept', 'application/json');
+    if (opts.json) {
+        headers.set('Content-Type', 'application/json');
     }
-    // Set a clean numeric price for sorting/filtering
-    car.numericPrice = parsePriceToINR(car.specs.Price);
-    
-    // Set a clean numeric horsepower
-    if (car.specs.Horsepower) {
-        car.numericHP = parseInt(car.specs.Horsepower) || 0;
-    } else {
-        car.numericHP = 0;
+    if (STATE.token) {
+        headers.set('Authorization', `Bearer ${STATE.token}`);
     }
 
-    // Set a clean numeric top speed
-    if (car.specs["Top Speed"]) {
-        car.numericSpeed = parseInt(car.specs["Top Speed"]) || 0;
-    } else {
-        car.numericSpeed = 0;
+    const res = await fetch(path, {
+        ...opts,
+        headers,
+        body: opts.json ? JSON.stringify(opts.json) : opts.body,
+        cache: 'no-store'
+    });
+
+    let payload = null;
+    try {
+        payload = await res.json();
+    } catch (_) {
+        payload = null;
     }
-});
+
+    if (!res.ok) {
+        const msg = payload && (payload.error || payload.message) ? (payload.error || payload.message) : `Request failed (${res.status})`;
+        const err = new Error(msg);
+        err.status = res.status;
+        err.payload = payload;
+        throw err;
+    }
+
+    return payload;
+}
 
 // Helper: Parse various price formats ($3 Million, ₹3.30 Crore, ₹74 Lakh) into numeric INR
 function parsePriceToINR(priceStr) {
@@ -118,20 +160,264 @@ function formatINR(numericVal) {
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    bootstrapApp().catch((e) => {
+        console.error(e);
+        alert(e.message || 'Failed to start app.');
+    });
+});
+
+async function bootstrapApp() {
     applyTheme(STATE.themeColor);
     initNavigation();
     initThemeSwitcher();
+    initAuthModal();
+
+    // Restore session if token exists.
+    await loadCurrentUser();
+
+    // Load cars from backend before initializing features depending on data.
+    await loadCarsFromApi();
+    normalizeCarsData();
+
     initFilters();
     initSearchSuggestions();
     initCompareDrawer();
     initModals();
     initReviews();
+    initAdminPanel();
+
     renderBrands();
     renderCarsGrid();
     renderNews();
     initLiveNews();
     updateQuickStats();
-});
+}
+
+async function loadCarsFromApi() {
+    const cars = await apiFetch('/api/cars');
+    if (!Array.isArray(cars)) throw new Error('Cars API returned invalid response');
+    CARS_DATA = cars;
+}
+
+async function loadCurrentUser() {
+    if (!STATE.token) {
+        STATE.user = null;
+        updateAuthUi();
+        return;
+    }
+    try {
+        const me = await apiFetch('/api/auth/me');
+        STATE.user = me;
+    } catch (e) {
+        // Token invalid/expired.
+        STATE.token = null;
+        localStorage.removeItem('autoheadz-token');
+        STATE.user = null;
+    }
+    updateAuthUi();
+}
+
+function updateAuthUi() {
+    const status = document.getElementById('authStatus');
+    if (status) {
+        status.textContent = STATE.user ? `Logged in: ${STATE.user.name} (${STATE.user.role})` : 'Not logged in';
+    }
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.style.display = STATE.user ? '' : 'none';
+    }
+
+    const nameInput = document.getElementById('reviewAuthor');
+    if (nameInput) {
+        if (STATE.user) {
+            nameInput.value = STATE.user.name;
+            nameInput.disabled = true;
+        } else {
+            nameInput.value = '';
+            nameInput.disabled = false;
+        }
+    }
+
+    const adminSection = document.getElementById('admin-section');
+    if (adminSection) {
+        adminSection.style.display = STATE.user && STATE.user.role === 'admin' ? '' : 'none';
+    }
+}
+
+function initAuthModal() {
+    const navAccountLink = document.getElementById('navAccountLink');
+    if (navAccountLink) {
+        navAccountLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openAuthModal();
+        });
+    }
+
+    const openAuthBtn = document.getElementById('openAuthBtn');
+    if (openAuthBtn) {
+        openAuthBtn.addEventListener('click', () => openAuthModal());
+    }
+
+    const backdrop = document.getElementById('authBackdrop');
+    const closeBtn = document.getElementById('authCloseBtn');
+    if (closeBtn) closeBtn.addEventListener('click', closeAuthModal);
+    if (backdrop) {
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeAuthModal();
+        });
+    }
+
+    const tabLogin = document.getElementById('authTabLogin');
+    const tabRegister = document.getElementById('authTabRegister');
+    if (tabLogin) tabLogin.addEventListener('click', () => setAuthPane('login'));
+    if (tabRegister) tabRegister.addEventListener('click', () => setAuthPane('register'));
+
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) loginBtn.addEventListener('click', handleLogin);
+    const registerBtn = document.getElementById('registerBtn');
+    if (registerBtn) registerBtn.addEventListener('click', handleRegister);
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+}
+
+function openAuthModal() {
+    const backdrop = document.getElementById('authBackdrop');
+    if (!backdrop) return;
+    backdrop.style.display = 'flex';
+    requestAnimationFrame(() => backdrop.classList.add('active'));
+    document.body.style.overflow = 'hidden';
+    setAuthPane('login');
+    setAuthError('');
+}
+
+function closeAuthModal() {
+    const backdrop = document.getElementById('authBackdrop');
+    if (!backdrop) return;
+    backdrop.classList.remove('active');
+    backdrop.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function setAuthPane(which) {
+    const tabLogin = document.getElementById('authTabLogin');
+    const tabRegister = document.getElementById('authTabRegister');
+    const paneLogin = document.getElementById('authPaneLogin');
+    const paneRegister = document.getElementById('authPaneRegister');
+    if (!tabLogin || !tabRegister || !paneLogin || !paneRegister) return;
+
+    if (which === 'register') {
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+        paneLogin.style.display = 'none';
+        paneRegister.style.display = 'block';
+    } else {
+        tabRegister.classList.remove('active');
+        tabLogin.classList.add('active');
+        paneRegister.style.display = 'none';
+        paneLogin.style.display = 'block';
+    }
+}
+
+function setAuthError(msg) {
+    const el = document.getElementById('authError');
+    if (!el) return;
+    if (!msg) {
+        el.style.display = 'none';
+        el.textContent = '';
+        return;
+    }
+    el.style.display = 'block';
+    el.textContent = msg;
+}
+
+async function handleLogin() {
+    try {
+        setAuthError('');
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const out = await apiFetch('/api/auth/login', { method: 'POST', json: { email, password } });
+        STATE.token = out.access_token;
+        localStorage.setItem('autoheadz-token', STATE.token);
+        STATE.user = out.user;
+        updateAuthUi();
+        closeAuthModal();
+    } catch (e) {
+        setAuthError(e.message || 'Login failed');
+    }
+}
+
+async function handleRegister() {
+    try {
+        setAuthError('');
+        const name = document.getElementById('regName').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const out = await apiFetch('/api/auth/register', { method: 'POST', json: { name, email, password } });
+        STATE.token = out.access_token;
+        localStorage.setItem('autoheadz-token', STATE.token);
+        STATE.user = out.user;
+        updateAuthUi();
+        closeAuthModal();
+    } catch (e) {
+        setAuthError(e.message || 'Register failed');
+    }
+}
+
+function handleLogout() {
+    STATE.token = null;
+    localStorage.removeItem('autoheadz-token');
+    STATE.user = null;
+    updateAuthUi();
+    closeAuthModal();
+}
+
+function initAdminPanel() {
+    const form = document.getElementById('adminCarForm');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById('adminCarMsg');
+        if (msg) msg.textContent = '';
+
+        if (!STATE.user || STATE.user.role !== 'admin') {
+            openAuthModal();
+            if (msg) msg.textContent = 'Login as admin to manage cars.';
+            return;
+        }
+
+        let specsObj = null;
+        try {
+            specsObj = JSON.parse(document.getElementById('adminCarSpecs').value);
+        } catch (err) {
+            if (msg) msg.textContent = 'Invalid specs JSON.';
+            return;
+        }
+
+        try {
+            const created = await apiFetch('/api/cars', {
+                method: 'POST',
+                json: {
+                    name: document.getElementById('adminCarName').value.trim(),
+                    brand: document.getElementById('adminCarBrand').value.trim(),
+                    image: document.getElementById('adminCarImage').value.trim(),
+                    link: document.getElementById('adminCarLink').value.trim(),
+                    specs: specsObj
+                }
+            });
+            CARS_DATA.unshift(created);
+            normalizeCarsData();
+            renderBrands();
+            renderCarsGrid();
+            updateQuickStats();
+            form.reset();
+            if (msg) msg.textContent = 'Car added.';
+        } catch (err) {
+            if (msg) msg.textContent = err.message || 'Failed to add car.';
+        }
+    });
+}
 
 // Live news updates (periodic refresh + manual refresh)
 function initLiveNews() {
@@ -1022,6 +1308,18 @@ function initReviews() {
     const starContainer = document.getElementById('reviewStars');
     const reviewForm = document.getElementById('reviewForm');
     const selectCar = document.getElementById('reviewCarSelect');
+    const nameInput = document.getElementById('reviewAuthor');
+
+    // If logged in, lock the name field to the account.
+    if (nameInput) {
+        if (STATE.user) {
+            nameInput.value = STATE.user.name;
+            nameInput.disabled = true;
+        } else {
+            nameInput.value = '';
+            nameInput.disabled = false;
+        }
+    }
 
     if (starContainer) {
         const stars = starContainer.querySelectorAll('i');
@@ -1054,91 +1352,70 @@ function initReviews() {
 
     // Populate car selectors inside form
     if (selectCar) {
+        selectCar.innerHTML = '';
         CARS_DATA.forEach(car => {
             const option = document.createElement('option');
-            option.value = car.name;
+            option.value = car.id;
             option.innerText = car.name;
             selectCar.appendChild(option);
         });
     }
 
     if (reviewForm) {
-        reviewForm.addEventListener('submit', (e) => {
+        reviewForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const nameInput = document.getElementById('reviewAuthor');
             const carSelected = document.getElementById('reviewCarSelect');
             const commentText = document.getElementById('reviewComment');
             const ratingVal = parseInt(starContainer.dataset.value || 0);
 
-            if (!nameInput.value.trim() || !commentText.value.trim() || ratingVal === 0) {
-                alert("Please fill in all review details and select a star rating!");
+            if (!STATE.user) {
+                alert('Please login to submit a review.');
+                openAuthModal();
                 return;
             }
 
-            const newReview = {
-                id: Date.now(),
-                author: nameInput.value.trim(),
-                car: carSelected.value,
-                comment: commentText.value.trim(),
-                rating: ratingVal,
-                date: new Date().toLocaleDateString()
-            };
+            if (!commentText.value.trim() || ratingVal === 0) {
+                alert("Please fill in review description and select a star rating!");
+                return;
+            }
 
-            // Save review
-            const savedReviews = JSON.parse(localStorage.getItem('autoheadz-reviews') || '[]');
-            savedReviews.unshift(newReview);
-            localStorage.setItem('autoheadz-reviews', JSON.stringify(savedReviews));
+            try {
+                await apiFetch('/api/reviews', {
+                    method: 'POST',
+                    json: {
+                        car_id: carSelected.value,
+                        rating: ratingVal,
+                        comment: commentText.value.trim()
+                    }
+                });
 
-            // Reset inputs
-            nameInput.value = '';
-            commentText.value = '';
-            starContainer.dataset.value = 0;
-            starContainer.querySelectorAll('i').forEach(s => s.classList.remove('selected'));
+                // Reset inputs
+                commentText.value = '';
+                starContainer.dataset.value = 0;
+                starContainer.querySelectorAll('i').forEach(s => s.classList.remove('selected'));
 
-            renderReviewsList();
+                renderReviewsList();
+            } catch (err) {
+                alert(err.message || 'Failed to submit review');
+            }
         });
     }
 
     renderReviewsList();
 }
 
-function renderReviewsList() {
+async function renderReviewsList() {
     const list = document.getElementById('reviewsList');
     if (!list) return;
 
-    // Load from local storage, fallback to static defaults
-    let reviews = JSON.parse(localStorage.getItem('autoheadz-reviews') || '[]');
-    
-    if (reviews.length === 0) {
-        // Inject some realistic mock reviews on first load
-        reviews = [
-            {
-                id: 1,
-                author: "Rohan K.",
-                car: "Porsche 911 Turbo S",
-                comment: "Absolutely perfect daily driver supercar. PDK transmission is lightning fast, launch control is dizzying. Best handling car in the world.",
-                rating: 5,
-                date: "20/05/2026"
-            },
-            {
-                id: 2,
-                author: "Anil Sharma",
-                car: "Toyota Land cruiser 300 (LC 300)",
-                comment: "True king of off-road and premium status. The twin-turbo V6 is extremely punchy, though waiting times are crazy. Highly recommended for touring.",
-                rating: 4,
-                date: "14/05/2026"
-            },
-            {
-                id: 3,
-                author: "Kabir Dev",
-                car: "Tesla Model S",
-                comment: "Acceleration is unreal, dashboard is super clean. Autopilot works decent in city, fast charging networks make road-trips seamless.",
-                rating: 5,
-                date: "02/05/2026"
-            }
-        ];
-        localStorage.setItem('autoheadz-reviews', JSON.stringify(reviews));
+    let reviews = [];
+    try {
+        reviews = await apiFetch('/api/reviews');
+    } catch (e) {
+        // If backend isn't available, show an informative message.
+        list.innerHTML = `<div style="color: var(--text-muted); padding: 12px;">Reviews unavailable (backend offline).</div>`;
+        return;
     }
 
     list.innerHTML = '';
@@ -1152,17 +1429,36 @@ function renderReviewsList() {
             starsHTML += `<i class="fa${i <= review.rating ? 's' : 'r'} fa-star"></i>`;
         }
 
+        const carObj = CARS_DATA.find(c => c.id === review.car_id);
+        const carName = carObj ? carObj.name : `Car #${review.car_id}`;
+        const dateStr = review.created_at ? new Date(review.created_at).toLocaleDateString() : '';
+        const canDelete = STATE.user && (STATE.user.role === 'admin' || (review.user && STATE.user.id === review.user.id));
+
         card.innerHTML = `
             <div class="review-card-header">
-                <span class="reviewer-name">${review.author}</span>
+                <span class="reviewer-name">${review.user ? review.user.name : 'Anonymous'}</span>
                 <span class="review-stars">${starsHTML}</span>
             </div>
             <div style="margin-bottom: 8px;">
-                <span class="reviewer-car-tag">${review.car}</span>
-                <span style="font-size:11px; color:var(--text-muted); margin-left: 10px;">${review.date}</span>
+                <span class="reviewer-car-tag">${carName}</span>
+                <span style="font-size:11px; color:var(--text-muted); margin-left: 10px;">${dateStr}</span>
+                ${canDelete ? `<button type="button" data-review-id="${review.id}" class="news-refresh-btn" style="padding: 6px 10px; margin-left: 10px; font-size: 11px;">Delete</button>` : ''}
             </div>
             <p class="review-text">${review.comment}</p>
         `;
+
+        if (canDelete) {
+            const btn = card.querySelector('button[data-review-id]');
+            btn.addEventListener('click', async () => {
+                if (!confirm('Delete this review?')) return;
+                try {
+                    await apiFetch(`/api/reviews/${review.id}`, { method: 'DELETE' });
+                    renderReviewsList();
+                } catch (e) {
+                    alert(e.message || 'Failed to delete review');
+                }
+            });
+        }
         list.appendChild(card);
     });
 }
