@@ -456,55 +456,95 @@
     <!-- JS Core scripts references -->
     <script type="module" src="app.js"></script>
 
-    <!-- AUTH MODAL (Login/Register) -->
-    <div class="modal-backdrop" id="authBackdrop" style="display:none;">
-        <div class="detail-modal" style="max-width: 520px;">
-            <i class="fa fa-times modal-close-btn" id="authCloseBtn"></i>
-            <div class="detail-modal-body" style="padding: 22px 22px 18px;">
-                <div style="display:flex; align-items:center; justify-content:space-between; gap: 12px; margin-bottom: 14px;">
-                    <h2 style="margin:0; font-size: 20px;">Account</h2>
-                    <div id="authStatus" style="font-size: 12px; color: var(--text-muted);"></div>
-                </div>
+    <!-- AUTH MODAL (Login/Register) - Modern Automotive Popup -->
+    <div class="auth-backdrop" id="authBackdrop">
+        <div class="auth-modal" id="authModal">
+            <button class="auth-close-btn" id="authCloseBtn" aria-label="Close">
+                <i class="fa fa-times"></i>
+            </button>
 
-                <div class="modal-tabs" style="margin-bottom: 14px;">
-                    <button class="modal-tab-btn active" id="authTabLogin" type="button">Login</button>
-                    <button class="modal-tab-btn" id="authTabRegister" type="button">Register</button>
+            <div class="auth-modal-header">
+                <div class="auth-logo">
+                    <img src="Logo.png" alt="Auto Headz" onerror="this.style.display='none'">
                 </div>
-
-                <div id="authPaneLogin">
-                    <div class="form-group">
-                        <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" class="filter-control" placeholder="you@example.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" class="filter-control" placeholder="Password" autocomplete="current-password">
-                    </div>
-                    <button type="button" class="review-btn" id="loginBtn" style="width:100%;">Login</button>
-                </div>
-
-                <div id="authPaneRegister" style="display:none;">
-                    <div class="form-group">
-                        <label for="regName">Name</label>
-                        <input type="text" id="regName" class="filter-control" placeholder="Your name" autocomplete="name">
-                    </div>
-                    <div class="form-group">
-                        <label for="regEmail">Email</label>
-                        <input type="email" id="regEmail" class="filter-control" placeholder="you@example.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="regPassword">Password</label>
-                        <input type="password" id="regPassword" class="filter-control" placeholder="Min 8 characters" autocomplete="new-password">
-                    </div>
-                    <button type="button" class="review-btn" id="registerBtn" style="width:100%;">Create Account</button>
-                </div>
-
-                <div id="authError" style="display:none; margin-top: 12px; color: #ff6b6b; font-size: 13px;"></div>
-
-                <div style="margin-top: 14px; display:flex; gap: 10px; justify-content:flex-end;">
-                    <button type="button" class="news-refresh-btn" id="logoutBtn" style="display:none;">Logout</button>
-                </div>
+                <h2>Welcome to <span>Auto Headz</span></h2>
+                <p id="authSubtitle">Sign in to your account to continue</p>
             </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="authTabLogin" type="button">Sign In</button>
+                <button class="auth-tab" id="authTabRegister" type="button">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="auth-pane active" id="authPaneLogin">
+                <div class="auth-form-group">
+                    <label for="loginEmail">Email Address</label>
+                    <div class="auth-input-wrapper">
+                        <i class="fa fa-envelope auth-input-icon"></i>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="auth-input-wrapper">
+                        <i class="fa fa-lock auth-input-icon"></i>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+                        <button type="button" class="auth-pw-toggle" id="loginPwToggle" tabindex="-1" aria-label="Toggle password visibility">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="auth-options">
+                    <label class="auth-checkbox">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="auth-checkmark"></span>
+                        Remember me
+                    </label>
+                </div>
+                <button type="button" class="auth-submit-btn" id="loginBtn">
+                    <i class="fa fa-arrow-right"></i> Sign In
+                </button>
+            </div>
+
+            <!-- Register Form -->
+            <div class="auth-pane" id="authPaneRegister">
+                <div class="auth-form-group">
+                    <label for="regName">Full Name</label>
+                    <div class="auth-input-wrapper">
+                        <i class="fa fa-user auth-input-icon"></i>
+                        <input type="text" id="regName" placeholder="Your full name" autocomplete="name">
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label for="regEmail">Email Address</label>
+                    <div class="auth-input-wrapper">
+                        <i class="fa fa-envelope auth-input-icon"></i>
+                        <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email">
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label for="regPassword">Password</label>
+                    <div class="auth-input-wrapper">
+                        <i class="fa fa-lock auth-input-icon"></i>
+                        <input type="password" id="regPassword" placeholder="Min 8 characters" autocomplete="new-password">
+                        <button type="button" class="auth-pw-toggle" id="regPwToggle" tabindex="-1" aria-label="Toggle password visibility">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="auth-submit-btn" id="registerBtn">
+                    <i class="fa fa-user-plus"></i> Create Account
+                </button>
+            </div>
+
+            <!-- Message Area -->
+            <div class="auth-message" id="authMessage"></div>
+
+            <!-- Logout Button (hidden unless logged in) -->
+            <button type="button" class="auth-logout-btn" id="logoutBtn" style="display:none;">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </button>
         </div>
     </div>
 

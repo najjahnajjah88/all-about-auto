@@ -1380,18 +1380,18 @@ const CARS_DATA = [
         }
     },
     {
-        "name": "Toyota Yaris",
+        "name": "Toyota Yaris GR",
         "brand": "Toyota",
-        "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200&auto=format&fit=crop",
+        "image": "https://paultan.org/image/2023/01/Toyota-GR-Yaris-with-GR-Parts-1.jpg",
         "link": "https://www.toyota.com",
         "specs": {
-            "Type": "Sedan",
-            "Price": "₹12 Lakh",
-            "Engine": "1.5L Petrol",
-            "Horsepower": "107 HP",
-            "Top Speed": "175 km/h",
-            "Mileage": "17 km/l",
-            "Transmission": "CVT",
+            "Type": "Sports Hatchback",
+            "Price": "₹5.9 million",
+            "Engine": "1.6L Petrol",
+            "Horsepower": "276 HP",
+            "Top Speed": "230 km/h",
+            "Mileage": "8.2 km/l",
+            "Transmission": "6-Speed Manual",
             "Fuel": "Petrol"
         }
     },

@@ -5,6 +5,8 @@ import os
 import re
 from pathlib import Path
 
+import sqlalchemy as sa
+
 from .extensions import db
 from .models import User, Car
 
@@ -19,12 +21,15 @@ def _extract_cars_data_from_js(js_text: str):
 
 
 def ensure_db_bootstrap(app) -> None:
-    """Create tables, seed admin, and import cars if empty.
+    """Seed admin and import cars if empty.
 
-    This keeps setup dead-simple for internship submissions.
+    Tables are created by Flask-Migrate (see migrations/).
     """
     with app.app_context():
-        db.create_all()
+        # If tables don't exist yet (e.g. before first migration), skip seeding.
+        inspector = sa.inspect(db.engine)
+        if not inspector.has_table("users") or not inspector.has_table("cars"):
+            return
 
         # Seed admin if missing.
         admin_email = os.getenv("ADMIN_EMAIL", "").strip().lower()

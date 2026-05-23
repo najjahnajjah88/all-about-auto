@@ -175,6 +175,11 @@ async function bootstrapApp() {
     // Restore session if token exists.
     await loadCurrentUser();
 
+    // Auto-show auth popup if user is not logged in
+    if (!STATE.user) {
+        setTimeout(() => openAuthModal(), 800);
+    }
+
     // Load cars from backend before initializing features depending on data.
     await loadCarsFromApi();
     normalizeCarsData();
@@ -280,6 +285,31 @@ function initAuthModal() {
 
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+
+    // Password show/hide toggle
+    document.querySelectorAll('.auth-pw-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = btn.closest('.auth-input-wrapper').querySelector('input');
+            if (!input) return;
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa fa-eye';
+            }
+        });
+    });
+
+    // ESC key to close modal
+    document.addEventListener('keydown', handleAuthEscKey);
+}
+
+function handleAuthEscKey(e) {
+    if (e.key === 'Escape') {
+        closeAuthModal();
+    }
 }
 
 function openAuthModal() {
@@ -289,15 +319,23 @@ function openAuthModal() {
     requestAnimationFrame(() => backdrop.classList.add('active'));
     document.body.style.overflow = 'hidden';
     setAuthPane('login');
-    setAuthError('');
+    setAuthMessage('');
+
+    // Pre-fill email from "Remember me"
+    const rememberedEmail = localStorage.getItem('autoheadz-remembered-email');
+    if (rememberedEmail) {
+        document.getElementById('loginEmail').value = rememberedEmail;
+        document.getElementById('rememberMe').checked = true;
+    }
 }
 
 function closeAuthModal() {
     const backdrop = document.getElementById('authBackdrop');
-    if (!backdrop) return;
+    if (!backdrop || !backdrop.classList.contains('active')) return;
     backdrop.classList.remove('active');
     backdrop.style.display = 'none';
     document.body.style.overflow = '';
+    setAuthMessage('');
 }
 
 function setAuthPane(which) {
@@ -320,37 +358,49 @@ function setAuthPane(which) {
     }
 }
 
-function setAuthError(msg) {
-    const el = document.getElementById('authError');
+function setAuthMessage(msg, type) {
+    const el = document.getElementById('authMessage');
     if (!el) return;
+    el.className = 'auth-message';
     if (!msg) {
-        el.style.display = 'none';
+        el.classList.remove('show', 'error', 'success');
         el.textContent = '';
         return;
     }
-    el.style.display = 'block';
     el.textContent = msg;
+    el.classList.add('show');
+    if (type === 'error') el.classList.add('error');
+    else if (type === 'success') el.classList.add('success');
 }
 
 async function handleLogin() {
     try {
-        setAuthError('');
+        setAuthMessage('');
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
         const out = await apiFetch('/api/auth/login', { method: 'POST', json: { email, password } });
         STATE.token = out.access_token;
         localStorage.setItem('autoheadz-token', STATE.token);
         STATE.user = out.user;
+
+        // Handle remember me
+        if (document.getElementById('rememberMe').checked) {
+            localStorage.setItem('autoheadz-remembered-email', email);
+        } else {
+            localStorage.removeItem('autoheadz-remembered-email');
+        }
+
         updateAuthUi();
-        closeAuthModal();
+        setAuthMessage('Logged in successfully!', 'success');
+        setTimeout(() => closeAuthModal(), 1000);
     } catch (e) {
-        setAuthError(e.message || 'Login failed');
+        setAuthMessage(e.message || 'Login failed', 'error');
     }
 }
 
 async function handleRegister() {
     try {
-        setAuthError('');
+        setAuthMessage('');
         const name = document.getElementById('regName').value.trim();
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
@@ -359,9 +409,10 @@ async function handleRegister() {
         localStorage.setItem('autoheadz-token', STATE.token);
         STATE.user = out.user;
         updateAuthUi();
-        closeAuthModal();
+        setAuthMessage('Account created! Welcome to Auto Headz.', 'success');
+        setTimeout(() => closeAuthModal(), 1500);
     } catch (e) {
-        setAuthError(e.message || 'Register failed');
+        setAuthMessage(e.message || 'Registration failed', 'error');
     }
 }
 
